@@ -11,7 +11,7 @@ export default class HeaderBar extends Component {
         return (
             <div>
                <div type="primary" onClick={this.props.toggle} className="collapse-btn">
-                {React.createElement(this.props.collapsed ? MenuUnfoldOutlined  : MenuFoldOutlined)}
+                {this.props.collapsed ? <MenuUnfoldOutlined style={{fontSize:'20px'}}/>  : <MenuFoldOutlined style={{fontSize:'20px'}}/>}
                 </div>
             </div>
         )
