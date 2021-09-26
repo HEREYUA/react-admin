@@ -27,10 +27,8 @@ export default class Home extends Component {
                     <Header className="site-layout-background" style={{ padding: 0 }}>
                        <HeaderBar collapsed={this.state.collapsed} toggle={this.toggle}/>
                     </Header>
-                    <Content
-                        className="site-layout-background content"
-                      
-                    >
+                  
+                    <Content>
                         <MainContent/>
                     </Content>
                     </Layout>

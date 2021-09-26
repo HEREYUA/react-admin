@@ -7,7 +7,7 @@ const Test = lazy(()=>import('../../pages/Test/Test'))
 export default class MainContent extends Component {
     render() {
         return (
-            <div>
+            <div style={{padding:16}}>
                 <Suspense fallback={<h1>loading.....</h1>}>
                 <Switch>
                     <Route path="/home" component={Home}/>
