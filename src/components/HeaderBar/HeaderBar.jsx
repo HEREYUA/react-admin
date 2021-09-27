@@ -4,20 +4,29 @@ import{
     MenuUnfoldOutlined,
     MenuFoldOutlined
 }from '@ant-design/icons'
-
+import { observer,inject } from 'mobx-react'
+import { withRouter } from 'react-router'
 import './header.css'
-export default class HeaderBar extends Component {
+@inject('loginStore')
+@observer
+ class HeaderBar extends Component {
     state={
         imgUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
     }
+
+    logout=()=>{
+        this.props.loginStore.logout()
+        this.props.history.push({pathname:'/login'})
+    }
     render() {
         const {imgUrl}=this.state
+        const {loginStore} =this.props
         const menu = (
             <Menu className='menu'>
               <Menu.ItemGroup title='用户中心' className='menu-group'>
-                <Menu.Item>你好</Menu.Item>
+                <Menu.Item>你好--{loginStore.userInfo.username}</Menu.Item>
                 <Menu.Item>个人信息</Menu.Item>
-                <Menu.Item><span>退出登录</span></Menu.Item>
+                <Menu.Item><span onClick={this.logout}>退出登录</span></Menu.Item>
               </Menu.ItemGroup>
               <Menu.ItemGroup title='设置中心' className='menu-group'>
                 <Menu.Item>个人设置</Menu.Item>
@@ -40,3 +49,4 @@ export default class HeaderBar extends Component {
     }
 }
 
+export default withRouter(HeaderBar)

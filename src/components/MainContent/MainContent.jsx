@@ -1,5 +1,6 @@
 import React, { Component,lazy,Suspense } from 'react'
-import { Switch,Route,Redirect } from 'react-router-dom'
+import { Switch,Redirect } from 'react-router-dom'
+import NavRoutes from '../NavRoutes/NavRoutes'
 const Home =lazy(()=>import('../../pages/Home/Home'))
 const About=lazy(()=>import('../../pages/About/About'))  
 const Test = lazy(()=>import('../../pages/Test/Test'))
@@ -10,9 +11,9 @@ export default class MainContent extends Component {
             <div style={{padding:16}}>
                 <Suspense fallback={<h1>loading.....</h1>}>
                 <Switch>
-                    <Route path="/home" component={Home}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="/test" component={Test}/>
+                    <NavRoutes path="/home" component={Home}/>
+                    <NavRoutes path="/about" component={About}/>
+                    <NavRoutes path="/test" component={Test}/>
                     <Redirect   to='/home'/>
                 </Switch>
                 </Suspense>
