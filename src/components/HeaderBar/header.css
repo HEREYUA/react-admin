@@ -1,4 +1,13 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+
+}
 .collapse-btn{
     margin-left: 1%;
+    width: 5%;
+}
+.admin-info{
     
+    margin-right: 5%;
 }
