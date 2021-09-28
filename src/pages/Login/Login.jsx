@@ -1,48 +1,61 @@
 import React, { Component } from 'react'
 import { observer,inject } from 'mobx-react'
 import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined,InsuranceOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router';
-import {randomNum} from '../../utils/utils'
+import {randomRgbColor} from '../../utils/utils'
 import './login.css'
 @inject('loginStore')
 @observer
 class Login extends Component {
-   state={
-       code:''
-   }
-
           /**
    * 生成验证码
    */
+  state={
+      code:''
+  }
   createCode = () => {
-    const ctx = this.canvas.getContext('2d')
-    const chars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    let code = ''
-    ctx.clearRect(0, 0, 80, 39)
-    for (let i = 0; i < 4; i++) {
-      const char = chars[randomNum(0, 57)]
-      code += char
-      ctx.font = randomNum(20, 25) + 'px SimHei'  //设置字体随机大小
-      ctx.fillStyle = '#D3D7F7'
-      ctx.textBaseline = 'middle'
-      ctx.shadowOffsetX = randomNum(-3, 3)
-      ctx.shadowOffsetY = randomNum(-3, 3)
-      ctx.shadowBlur = randomNum(-3, 3)
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)'
-      let x = 80 / 5 * (i + 1)
-      let y = 39 / 2
-      let deg = randomNum(-25, 25)
-      /**设置旋转角度和坐标原点**/
-      ctx.translate(x, y)
-      ctx.rotate(deg * Math.PI / 180)
-      ctx.fillText(char, 0, 0)
-      /**恢复旋转角度和坐标原点**/
-      ctx.rotate(-deg * Math.PI / 180)
-      ctx.translate(-x, -y)
+    var currentCode=[]
+    var context = this.canvas.getContext("2d");
+    this.canvas.width = 100;
+    this.canvas.height = 40;
+    context.strokeRect(0, 0, 100, 40);
+    var aCode = "A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,1,2,3,4,5,6,7,8,9";
+    console.log(aCode.split(","));
+    var aLength = aCode.split(",").length;
+    for (var i = 0; i <= 3; i++) {
+        var x = 20 + i * 20;
+        var y = 20 + Math.random() * 10;
+        var j = Math.floor(Math.random() * aLength);
+        var deg = Math.random() * 90 * Math.PI / 180;//随机弧度
+        var txt = aCode.split(",")[j];
+        currentCode[i]=txt.toLowerCase()
+        context.fillStyle = randomRgbColor();
+        context.font = "bold 20px 微软雅黑";
+        //修改坐标原点和旋转角度
+        context.translate(x, y);
+        context.rotate(deg);
+        context.fillText(txt, 0, 0);
+        //恢复坐标原点和旋转角度
+        context.rotate(-deg);
+        context.translate(-x, -y);
     }
-    this.setState({
-      code
-    })
+    //干扰线
+    for (var i = 0; i < 8; i++) {
+        context.strokeStyle = randomRgbColor();
+        context.beginPath();
+        context.moveTo(Math.random() * 120, Math.random() * 40);
+        context.lineTo(Math.random() * 120, Math.random() * 40);
+        context.stroke();
+    }
+    /**绘制干扰点**/
+    for (var i = 0; i < 20; i++) {
+        context.fillStyle = randomRgbColor();
+        context.beginPath();
+        context.arc(Math.random() * 120, Math.random() * 40, 1, 0, 2 * Math.PI);
+        context.fill();
+    }
+    this.setState({code:currentCode.join("")})
   }
         // 提交成功的回调
         onFinish = (values) => {
@@ -64,50 +77,59 @@ class Login extends Component {
         return (
             <div className="login-form">
                  <Form
-                    name="basic"
-                    labelCol={{ span: 10 }}
-                    wrapperCol={{ span: 5 }}
+                     wrapperCol= {{ span: 5 ,offset:9}}
+                    name="normal_login"
+                    className="login-form"
                     initialValues={{ remember: true }}
                     onFinish={this.onFinish}
-                    onFinishFailed={this.onFinishFailed}
-                    autoComplete="off"
-                    
-                    >
+                >
                     <Form.Item
-                        label="姓名"
                         name="username"
-                        rules={[{ required: true, message: '请输入你的姓名' }]}
                     >
-                        <Input />
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
                     </Form.Item>
-
                     <Form.Item
-                        label="密码"
                         name="password"
-                        rules={[{ required: true, message: '请输入你的密码' }]}
+                        rules={[{ required: true, message: 'Please input your Password!' }]}
                     >
-                        <Input.Password />
+                        <Input.Password 
+                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        type="password"
+                        placeholder="密码"
+                        />
                     </Form.Item>
                     <Form.Item
-                        label="验证码"
-                        name="code"
-                        rules={[{ required: true, message: '请输入你的验证码' }]}
+                        
+                        
                     >
-                         <Input />
-                       <canvas onClick={this.createCode} width="80" height='39' ref={el => this.canvas = el}/>
+                         <Form.Item name="code" noStyle>
+                         <Input
+                         style={{width:'50%',position:'absolute',top:0}}
+                        prefix={<InsuranceOutlined className="site-form-item-icon" />}
+                        placeholder="验证码"
+                        />
+                        </Form.Item>
+                       
+                       
+                        <canvas onClick={this.createCode}  style={{marginLeft:'75%'}} ref={el => this.canvas = el}/>
+                      
+                    </Form.Item>
+                    <Form.Item>
+                        <Form.Item name="remember" valuePropName="checked" noStyle>
+                        <Checkbox>记住我</Checkbox>
+                        </Form.Item>
+
+                        <a style={{marginLeft:'50%'}} className="login-form-forgot" href="">
+                        忘记密码
+                        </a>
                     </Form.Item>
 
-
-                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 10, span: 16 }}>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-
-                    <Form.Item wrapperCol={{ offset: 12, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
+                    <Form.Item>
+                        <Button block type="primary" htmlType="submit" className="login-form-button">
                         登录
                         </Button>
                     </Form.Item>
-                </Form>
+            </Form>
             </div>
         )
     }
