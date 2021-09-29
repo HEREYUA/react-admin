@@ -12,7 +12,7 @@ import {
 export default class SiderNav extends Component {
     render() {
         return (
-            <div>
+            <div >
                  <Menu
                     defaultSelectedKeys={['1']}
                     mode="inline"

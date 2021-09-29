@@ -20,8 +20,11 @@ export default class Home extends Component {
             <div>
                  <Layout>
                     <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                        <div className="logo" />
-                        <SiderNav />
+                        <div style={{height: '100vh',overflowY:'scroll'}}>
+                            <div className="logo" />
+                            <SiderNav />
+                        </div>
+                       
                     </Sider>
                     <Layout className="site-layout">
                     <Header className="site-layout-background" style={{ padding: 0 }}>

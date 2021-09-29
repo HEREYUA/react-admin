@@ -8,12 +8,13 @@ import './login.css'
 @inject('loginStore')
 @observer
 class Login extends Component {
-          /**
-   * 生成验证码
-   */
+
   state={
       code:''
   }
+    /**
+   * 生成验证码
+   */
   createCode = () => {
     var currentCode=[]
     var context = this.canvas.getContext("2d");
@@ -41,7 +42,7 @@ class Login extends Component {
         context.translate(-x, -y);
     }
     //干扰线
-    for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 8; j++) {
         context.strokeStyle = randomRgbColor();
         context.beginPath();
         context.moveTo(Math.random() * 120, Math.random() * 40);
@@ -49,7 +50,7 @@ class Login extends Component {
         context.stroke();
     }
     /**绘制干扰点**/
-    for (var i = 0; i < 20; i++) {
+    for (var k= 0; k < 20; k++) {
         context.fillStyle = randomRgbColor();
         context.beginPath();
         context.arc(Math.random() * 120, Math.random() * 40, 1, 0, 2 * Math.PI);
@@ -76,7 +77,7 @@ class Login extends Component {
         console.log(this.props)
         return (
             <div className="login-form">
-                 <Form
+                <Form
                      wrapperCol= {{ span: 5 ,offset:9}}
                     name="normal_login"
                     className="login-form"
@@ -85,12 +86,26 @@ class Login extends Component {
                 >
                     <Form.Item
                         name="username"
+                        rules={[{required:true,message:'请输入用户名'}]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+                      <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+                        
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Please input your Password!' }]}
+                            rules={[{ required: true, message: '请输入密码!' },
+                        {
+                            
+                            validator: (_, value) =>{
+                                
+                            if(value.length >= 6 && value.length<=10) {
+                                return Promise.resolve()
+                            }else{
+                                return Promise.reject('密码长度必须是6~10位')
+                            }
+                            }
+                            
+                        }]}
                     >
                         <Input.Password 
                         prefix={<LockOutlined className="site-form-item-icon" />}
@@ -102,7 +117,21 @@ class Login extends Component {
                         
                         
                     >
-                         <Form.Item name="code" noStyle>
+                         <Form.Item name="code" noStyle
+                            rules={[
+                                {required:true,message:'请输入验证码！'},
+                                {
+                                    validator:(_,value)=>{
+                                        console.log(value.toLowerCase(),this.state.code)
+                                        if(this.state.code==value.toLowerCase()){
+                                            return Promise.resolve()
+                                        }else{
+                                            return Promise.reject('请输入正确的验证码')
+                                        }
+                                    }
+                                }
+                            ]}
+                         >
                          <Input
                          style={{width:'50%',position:'absolute',top:0}}
                         prefix={<InsuranceOutlined className="site-form-item-icon" />}
@@ -129,7 +158,7 @@ class Login extends Component {
                         登录
                         </Button>
                     </Form.Item>
-            </Form>
+                </Form>
             </div>
         )
     }
