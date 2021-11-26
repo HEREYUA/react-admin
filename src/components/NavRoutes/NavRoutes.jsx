@@ -7,14 +7,15 @@ import { observer,inject } from 'mobx-react'
  class NavRoutes extends Component {
     render() {
         return (
-            <div>
-                {
-                    this.props.loginStore.isLogin?<Route {...this.props} /> :
-                    <Redirect to={{
-                        pathname: '/login'
-                      }}/>
-                }
-            </div>
+            // <div>
+            //     {
+            //         this.props.loginStore.isLogin?<Route {...this.props} /> :
+            //         <Redirect to={{
+            //             pathname: '/login'
+            //           }}/>
+            //     }
+            // </div>
+            <Route {...this.props} /> 
         )
     }
 }

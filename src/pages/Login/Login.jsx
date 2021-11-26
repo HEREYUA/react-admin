@@ -5,21 +5,19 @@ import { UserOutlined, LockOutlined,InsuranceOutlined } from '@ant-design/icons'
 import { withRouter } from 'react-router';
 import {randomRgbColor} from '../../utils/utils'
 import './login.css'
-@inject('loginStore')
-@observer
-class Login extends Component {
 
-  state={
-      code:''
-  }
+function Login (props){
+
+  const [code,setCode]=React.useState('')
+  const canvas = React.useRef(null);
     /**
    * 生成验证码
    */
-  createCode = () => {
+  const createCode = () => {
     var currentCode=[]
-    var context = this.canvas.getContext("2d");
-    this.canvas.width = 100;
-    this.canvas.height = 40;
+    var context = canvas.current.getContext("2d");
+    canvas.current.width = 100;
+    canvas.current.height = 40;
     context.strokeRect(0, 0, 100, 40);
     var aCode = "A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,1,2,3,4,5,6,7,8,9";
     console.log(aCode.split(","));
@@ -42,7 +40,7 @@ class Login extends Component {
         context.translate(-x, -y);
     }
     //干扰线
-    for (var j = 0; j < 8; j++) {
+    for (var s = 0; s< 8; s++) {
         context.strokeStyle = randomRgbColor();
         context.beginPath();
         context.moveTo(Math.random() * 120, Math.random() * 40);
@@ -56,25 +54,21 @@ class Login extends Component {
         context.arc(Math.random() * 120, Math.random() * 40, 1, 0, 2 * Math.PI);
         context.fill();
     }
-    this.setState({code:currentCode.join("")})
+    setCode(currentCode.join(""))
   }
         // 提交成功的回调
-        onFinish = (values) => {
+        const onFinish = (values) => {
           console.log('Success:', values);
-          this.props.loginStore.setUserInfo(values)
-          this.props.history.push({pathname:'/'})
+          props.loginStore.setUserInfo(values)
+          props.history.push({pathname:'/'})
         };
       
-        // 提交失败的回调
-        onFinishFailed = (errorInfo) => {
-          console.log('Failed:', errorInfo);
-        }
+       
+        
+       React.useEffect(()=>{
+        createCode()
+       },[])
 
-        componentDidMount(){
-            this.createCode()
-        }
-    render() {
-        console.log(this.props)
         return (
             <div className="login-form">
                 <Form
@@ -82,7 +76,7 @@ class Login extends Component {
                     name="normal_login"
                     className="login-form"
                     initialValues={{ remember: true }}
-                    onFinish={this.onFinish}
+                    onFinish={onFinish}
                 >
                     <Form.Item
                         name="username"
@@ -122,8 +116,8 @@ class Login extends Component {
                                 {required:true,message:'请输入验证码！'},
                                 {
                                     validator:(_,value)=>{
-                                        console.log(value.toLowerCase(),this.state.code)
-                                        if(this.state.code==value.toLowerCase()){
+                                        console.log(value.toLowerCase(),code)
+                                        if(code===value.toLowerCase()){
                                             return Promise.resolve()
                                         }else{
                                             return Promise.reject('请输入正确的验证码')
@@ -140,7 +134,7 @@ class Login extends Component {
                         </Form.Item>
                        
                        
-                        <canvas onClick={this.createCode}  style={{marginLeft:'75%'}} ref={el => this.canvas = el}/>
+                        <canvas onClick={createCode}  style={{marginLeft:'75%'}} ref={canvas}/>
                       
                     </Form.Item>
                     <Form.Item>
@@ -148,7 +142,7 @@ class Login extends Component {
                         <Checkbox>记住我</Checkbox>
                         </Form.Item>
 
-                        <a style={{marginLeft:'50%'}} className="login-form-forgot" href="">
+                        <a style={{marginLeft:'50%'}} className="login-form-forgot" >
                         忘记密码
                         </a>
                     </Form.Item>
@@ -161,6 +155,6 @@ class Login extends Component {
                 </Form>
             </div>
         )
-    }
+    
 }
-export default withRouter(Login)
+export default inject('loginStore')(observer(withRouter(Login)));
