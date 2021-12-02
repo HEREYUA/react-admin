@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table,Space } from 'antd';
+import { Table,Space,message } from 'antd';
 import {getUserData,deleteUser} from '../../api/home'
 import BreadCrumb from '../../components/BreadCrumb/BreadCrumb'
 
@@ -53,7 +53,15 @@ export default function Home(){
     const deleteUserData=(record)=>{
         console.log(record)
         deleteUser({'name':record.name}).then(resp=>{
-            console.log('删除成功！')
+            if(resp.data.msg){
+                    if(resp.data.msg=='删除成功'){
+                        message.success(resp.data.msg)
+                        getData()
+                    }else{
+                        message.error(resp.data.msg)
+                    }
+            }
+            console.log(resp.data)
 
         }).catch(error=>{
             console.log(error)

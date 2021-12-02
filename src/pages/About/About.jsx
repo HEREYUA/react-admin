@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import BreadCrumb from '../../components/BreadCrumb/BreadCrumb'
-export default class About extends Component {
-    render() {
+export default function About(){
+   
         return (
             <div>
                  <BreadCrumb arr={['关于']}/>
@@ -9,5 +9,5 @@ export default class About extends Component {
                
             </div>
         )
-    }
+    
 }

@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import { Route,Redirect } from 'react-router'
 import { observer,inject } from 'mobx-react'
 
-@inject('loginStore')
-@observer
- class NavRoutes extends Component {
-    render() {
+ function NavRoutes(props){
+  
         return (
             // <div>
             //     {
@@ -15,8 +13,8 @@ import { observer,inject } from 'mobx-react'
             //           }}/>
             //     }
             // </div>
-            <Route {...this.props} /> 
+            <Route {...props} /> 
         )
-    }
+    
 }
-export default NavRoutes
+export default inject('loginStore')(observer(NavRoutes))

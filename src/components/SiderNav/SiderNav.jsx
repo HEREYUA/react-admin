@@ -9,8 +9,8 @@ import {
   } from '@ant-design/icons';
   import { Link } from 'react-router-dom';
   const { SubMenu } = Menu;
-export default class SiderNav extends Component {
-    render() {
+export default function SiderNav() {
+    
         return (
             <div >
                  <Menu
@@ -45,5 +45,5 @@ export default class SiderNav extends Component {
                 </Menu>
             </div>
         )
-    }
+    
 }

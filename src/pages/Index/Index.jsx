@@ -6,20 +6,16 @@ import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import MainContent from '../../components/MainContent/MainContent'
 const { Header, Sider, Content } = Layout;
 
-export default class Home extends Component {
-    state = {
-        collapsed: false,
+export default function Index(){
+    const [collapse,setCollpse]=React.useState(false)
+    const  toggle = () => {
+          setCollpse(!collapse)
       };
-      toggle = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      };
-    render() {
+   
         return (
             <div>
                  <Layout>
-                    <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+                    <Sider trigger={null} collapsible collapsed={collapse}>
                         <div style={{height: '100vh',overflowY:'scroll'}}>
                             <div className="logo" />
                             <SiderNav />
@@ -28,7 +24,7 @@ export default class Home extends Component {
                     </Sider>
                     <Layout className="site-layout">
                     <Header className="site-layout-background" style={{ padding: 0 }}>
-                       <HeaderBar collapsed={this.state.collapsed} toggle={this.toggle}/>
+                       <HeaderBar collapsed={collapse} toggle={toggle}/>
                     </Header>
                   
                     <Content>
@@ -38,7 +34,7 @@ export default class Home extends Component {
                 </Layout>
             </div>
         )
-    }
+    
     
 }
 
